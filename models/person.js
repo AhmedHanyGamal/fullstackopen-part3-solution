@@ -1,16 +1,16 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
-mongoose.set("strictQuery", false)
+mongoose.set("strictQuery", false);
 
-const url = process.env.MONGO_URI
+const url = process.env.MONGO_URI;
 
-mongoose.connect(url, {family: 4})
-    .then((result) => {
+mongoose.connect(url, { family: 4 })
+    .then(() => {
         console.log("connected to mongo database successfully");
     })
     .catch((err) => {
         console.log(`couldn't connect to the mongo database: ${err.message}`);
-    })
+    });
 
 const personSchema = new mongoose.Schema({
     name: {
@@ -24,22 +24,22 @@ const personSchema = new mongoose.Schema({
         validate: {
             validator: function(num) {
                 // return num.length >= 8 && /^\d{2,3}-\d+$/.test(num)
-                return /^\d{2,3}-\d+$/.test(num)
+                return /^\d{2,3}-\d+$/.test(num);
             },
             message: (props) => `${props.value} is not a valid phone number!`
         },
         required: true
     }
-})
+});
 
-personSchema.set('toJSON', {
+personSchema.set("toJSON", {
     transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
+        returnedObject.id = returnedObject._id.toString();
+        delete returnedObject._id;
+        delete returnedObject.__v;
     }
-})
+});
 
-const Person = mongoose.model('Person', personSchema)
+const Person = mongoose.model("Person", personSchema);
 
-module.exports = Person
+module.exports = Person;
